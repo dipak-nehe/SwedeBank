@@ -1,25 +1,1493 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="2" total="5" passed="3" failed="0" skipped="0">
+<testng-results ignored="0" total="142" passed="142" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2020-07-10T21:00:24 CDT" name="Default suite" finished-at="2020-07-10T21:00:28 CDT" duration-ms="4255">
+  <suite started-at="2020-07-13T13:27:10 CDT" name="Suite" finished-at="2020-07-13T14:02:06 CDT" duration-ms="2095401">
     <groups>
+      <group name="FXRates">
+        <method signature="restApiTest.getIndecativeRateCcyPairList()[pri:0, instance:SwedBank.restApiTest@23f7d05d]" name="getIndecativeRateCcyPairList" class="SwedBank.restApiTest"/>
+        <method signature="restApiTest.validateIndicativeCcyPairResponse()[pri:1, instance:SwedBank.restApiTest@23f7d05d]" name="validateIndicativeCcyPairResponse" class="SwedBank.restApiTest"/>
+        <method signature="restApiTest.getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" name="getIndividualExchangeRateForGivenCCY" class="SwedBank.restApiTest"/>
+        <method signature="restApiTest.writeToExcelRate()[pri:3, instance:SwedBank.restApiTest@23f7d05d]" name="writeToExcelRate" class="SwedBank.restApiTest"/>
+      </group> <!-- FXRates -->
+      <group name="MarketOrder">
+        <method signature="restApiTest.marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" name="marketOrdersTest" class="SwedBank.restApiTest"/>
+      </group> <!-- MarketOrder -->
     </groups>
-    <test started-at="2020-07-10T21:00:24 CDT" name="Default test" finished-at="2020-07-10T21:00:28 CDT" duration-ms="4255">
+    <test started-at="2020-07-13T13:27:10 CDT" name="Test" finished-at="2020-07-13T14:02:06 CDT" duration-ms="2095401">
       <class name="SwedBank.restApiTest">
-        <test-method signature="getIndecativeRateCcyPairList()[pri:0, instance:SwedBank.restApiTest@2133814f]" started-at="2020-07-10T21:00:24 CDT" name="getIndecativeRateCcyPairList" finished-at="2020-07-10T21:00:27 CDT" duration-ms="3133" status="PASS">
+        <test-method signature="getIndecativeRateCcyPairList()[pri:0, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:27:10 CDT" name="getIndecativeRateCcyPairList" finished-at="2020-07-13T13:27:20 CDT" duration-ms="9412" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- getIndecativeRateCcyPairList -->
-        <test-method signature="validateIndicativeCcyPairResponse()[pri:1, instance:SwedBank.restApiTest@2133814f]" started-at="2020-07-10T21:00:27 CDT" name="validateIndicativeCcyPairResponse" finished-at="2020-07-10T21:00:27 CDT" duration-ms="5" status="PASS">
+        <test-method signature="validateIndicativeCcyPairResponse()[pri:1, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:27:20 CDT" name="validateIndicativeCcyPairResponse" finished-at="2020-07-13T13:27:20 CDT" depends-on-methods="SwedBank.restApiTest.getIndecativeRateCcyPairList" duration-ms="5" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- validateIndicativeCcyPairResponse -->
-        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@2133814f]" started-at="2020-07-10T21:00:27 CDT" name="marketOrdersTest" finished-at="2020-07-10T21:00:28 CDT" duration-ms="1068" status="PASS">
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:27:20 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:27:36 CDT" duration-ms="15902" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:27:36 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:27:52 CDT" duration-ms="16047" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[DKKNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:27:52 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:28:08 CDT" duration-ms="16239" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[SARSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:28:08 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:28:24 CDT" duration-ms="15933" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[JPYDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:28:24 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:28:40 CDT" duration-ms="16181" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NOKDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:28:40 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:28:56 CDT" duration-ms="15943" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[SEKDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:28:56 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:29:12 CDT" duration-ms="16212" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDILS]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:29:12 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:29:28 CDT" duration-ms="15896" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AUDJPY]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:29:28 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:29:44 CDT" duration-ms="15971" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[ZARNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:29:44 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:30:00 CDT" duration-ms="15899" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[SGDHKD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:30:00 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:30:16 CDT" duration-ms="16064" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[PLNHUF]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:30:16 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:30:32 CDT" duration-ms="15913" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:30:32 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:30:48 CDT" duration-ms="15945" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[INRSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:30:48 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:31:04 CDT" duration-ms="15925" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:31:04 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:31:21 CDT" duration-ms="16581" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[JPYHKD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:31:21 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:31:36 CDT" duration-ms="15949" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:31:36 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:31:52 CDT" duration-ms="15979" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AUDUSD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:31:52 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:32:08 CDT" duration-ms="15906" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NZDDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:32:08 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:32:25 CDT" duration-ms="16211" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDHKD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:32:25 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:32:41 CDT" duration-ms="15936" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[BGNNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:32:41 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:32:56 CDT" duration-ms="15923" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[INRNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:32:56 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:33:12 CDT" duration-ms="15970" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AUDCAD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:33:12 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:33:29 CDT" duration-ms="16198" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPJPY]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:33:29 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:33:45 CDT" duration-ms="15890" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CZKSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:33:45 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:34:00 CDT" duration-ms="15963" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[MXNNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:34:00 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:34:16 CDT" duration-ms="15923" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:34:16 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:34:32 CDT" duration-ms="15928" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CADCHF]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:34:32 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:34:48 CDT" duration-ms="15947" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AUDDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:34:48 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:35:05 CDT" duration-ms="16233" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURAED]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:35:05 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:35:20 CDT" duration-ms="15948" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURBGN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:35:20 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:35:36 CDT" duration-ms="15960" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CHFSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:35:36 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:35:52 CDT" duration-ms="15899" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURCNH]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:35:52 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:36:08 CDT" duration-ms="16084" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[RONSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:36:08 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:36:24 CDT" duration-ms="15918" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[DKKSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:36:24 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:36:41 CDT" duration-ms="16231" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NZDSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:36:41 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:36:56 CDT" duration-ms="15920" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[HKDNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:36:56 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:37:13 CDT" duration-ms="16231" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPCAD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:37:13 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:37:29 CDT" duration-ms="15957" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CHFDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:37:29 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:37:45 CDT" duration-ms="15963" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[HUFNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:37:45 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:38:01 CDT" duration-ms="15875" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AEDSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:38:01 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:38:16 CDT" duration-ms="15944" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NZDNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:38:16 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:38:32 CDT" duration-ms="15961" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[HKDSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:38:32 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:38:48 CDT" duration-ms="15997" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AEDNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:38:48 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:39:04 CDT" duration-ms="15990" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CNHDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:39:04 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:39:20 CDT" duration-ms="15904" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CADCNH]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:39:20 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:39:36 CDT" duration-ms="15916" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPNZD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:39:36 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:39:52 CDT" duration-ms="16212" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CADJPY]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:39:52 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:40:08 CDT" duration-ms="15937" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[SGDNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:40:08 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:40:25 CDT" duration-ms="16756" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[JPYSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:40:25 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:40:41 CDT" duration-ms="15931" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDCHF]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:40:41 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:40:57 CDT" duration-ms="15935" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CHFJPY]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:40:57 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:41:13 CDT" duration-ms="15943" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURSAR]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:41:13 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:41:29 CDT" duration-ms="16050" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURSGD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:41:29 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:41:45 CDT" duration-ms="15940" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[PLNNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:41:45 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:42:01 CDT" duration-ms="16017" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AUDCNH]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:42:01 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:42:17 CDT" duration-ms="15982" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDRUB]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:42:17 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:42:33 CDT" duration-ms="16256" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURCZK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:42:33 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:42:49 CDT" duration-ms="15943" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[HUFSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:42:49 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:43:05 CDT" duration-ms="16011" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NZDCHF]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:43:05 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:43:21 CDT" duration-ms="15935" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDHUF]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:43:21 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:43:37 CDT" duration-ms="16265" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[RONNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:43:37 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:43:53 CDT" duration-ms="15986" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDCAD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:43:53 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:44:09 CDT" duration-ms="15969" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[ILSNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:44:09 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:44:25 CDT" duration-ms="15957" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPCHF]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:44:25 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:44:41 CDT" duration-ms="15944" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AUDSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:44:41 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:44:57 CDT" duration-ms="15937" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPCNH]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:44:57 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:45:13 CDT" duration-ms="15931" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CNHNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:45:13 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:45:29 CDT" duration-ms="15920" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[BGNSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:45:29 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:45:45 CDT" duration-ms="15969" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:45:45 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:46:01 CDT" duration-ms="15963" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURNZD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:46:01 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:46:17 CDT" duration-ms="15919" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURMXN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:46:17 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:46:33 CDT" duration-ms="15931" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDPLN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:46:33 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:46:49 CDT" duration-ms="16215" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURCAD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:46:49 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:47:05 CDT" duration-ms="15909" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CZKNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:47:05 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:47:21 CDT" duration-ms="16034" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:47:21 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:47:37 CDT" duration-ms="15893" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NZDCNH]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:47:37 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:47:53 CDT" duration-ms="15926" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CADDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:47:53 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:48:09 CDT" duration-ms="16078" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDSGD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:48:09 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:48:25 CDT" duration-ms="16270" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDRON]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:48:25 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:48:41 CDT" duration-ms="15979" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDCNH]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:48:41 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:48:57 CDT" duration-ms="15912" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NZDCAD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:48:57 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:49:13 CDT" duration-ms="16066" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPSGD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:49:13 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:49:29 CDT" duration-ms="16167" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[ZARSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:49:29 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:49:45 CDT" duration-ms="15957" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPUSD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:49:45 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:50:01 CDT" duration-ms="16016" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURZAR]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:50:01 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:50:17 CDT" duration-ms="15966" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[JPYNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:50:17 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:50:33 CDT" duration-ms="15968" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AUDNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:50:33 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:50:51 CDT" duration-ms="17275" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURAUD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:50:51 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:51:07 CDT" duration-ms="16291" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[PLNSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:51:07 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:51:23 CDT" duration-ms="15894" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURHKD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:51:23 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:51:39 CDT" duration-ms="16013" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURJPY]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:51:39 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:51:55 CDT" duration-ms="15900" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[RUBNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:51:55 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:52:13 CDT" duration-ms="17963" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NZDJPY]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:52:13 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:52:29 CDT" duration-ms="15952" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CNHSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:52:29 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:52:45 CDT" duration-ms="16057" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[SGDSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:52:45 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:53:01 CDT" duration-ms="15989" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURINR]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:53:01 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:53:17 CDT" duration-ms="16367" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[THBNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:53:17 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:53:33 CDT" duration-ms="16194" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDTHB]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:53:33 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:53:49 CDT" duration-ms="15967" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CHFCNH]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:53:49 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:54:05 CDT" duration-ms="15997" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NOKSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:54:05 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:54:21 CDT" duration-ms="16260" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[RUBSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:54:21 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:54:37 CDT" duration-ms="15921" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDCZK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:54:37 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:54:53 CDT" duration-ms="15931" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[ILSSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:54:53 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:55:09 CDT" duration-ms="15911" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDMXN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:55:09 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:55:25 CDT" duration-ms="15906" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURGBP]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:55:25 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:55:41 CDT" duration-ms="15890" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURCHF]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:55:41 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:55:57 CDT" duration-ms="15923" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDZAR]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:55:57 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:56:13 CDT" duration-ms="15909" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CADNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:56:13 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:56:29 CDT" duration-ms="15917" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURHUF]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:56:29 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:56:45 CDT" duration-ms="15915" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[MXNSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:56:45 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:57:01 CDT" duration-ms="16328" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURRUB]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:57:01 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:57:17 CDT" duration-ms="15947" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURRON]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:57:17 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:57:34 CDT" duration-ms="17285" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[SEKNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:57:34 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:57:50 CDT" duration-ms="15903" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURTHB]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:57:50 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:58:06 CDT" duration-ms="15983" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CHFNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:58:06 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:58:22 CDT" duration-ms="15891" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDJPY]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:58:22 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:58:38 CDT" duration-ms="16053" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDSAR]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:58:38 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:58:54 CDT" duration-ms="15886" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[CADSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:58:54 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:59:10 CDT" duration-ms="16033" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPDKK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:59:10 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:59:26 CDT" duration-ms="15926" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[GBPAUD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:59:26 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:59:42 CDT" duration-ms="16209" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AUDNZD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:59:42 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T13:59:58 CDT" duration-ms="15959" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[NZDUSD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T13:59:58 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T14:00:14 CDT" duration-ms="15949" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[USDNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:00:14 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T14:00:30 CDT" duration-ms="15947" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[AUDCHF]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:00:30 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T14:00:46 CDT" duration-ms="15972" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURILS]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:00:46 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T14:01:02 CDT" duration-ms="15983" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURUSD]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:01:02 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T14:01:18 CDT" duration-ms="16226" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[EURPLN]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:01:18 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T14:01:34 CDT" duration-ms="15898" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[SARNOK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="getIndividualExchangeRateForGivenCCY(java.lang.String)[pri:2, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:01:34 CDT" name="getIndividualExchangeRateForGivenCCY" data-provider="data-provider" finished-at="2020-07-13T14:01:50 CDT" duration-ms="16227" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[THBSEK]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getIndividualExchangeRateForGivenCCY -->
+        <test-method signature="writeToExcelRate()[pri:3, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:01:51 CDT" name="writeToExcelRate" finished-at="2020-07-13T14:01:57 CDT" duration-ms="6360" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- writeToExcelRate -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:01:57 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:01:58 CDT" duration-ms="918" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- marketOrdersTest -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:01:58 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:01:59 CDT" duration-ms="849" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- marketOrdersTest -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:01:59 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:01:59 CDT" duration-ms="828" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- marketOrdersTest -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:01:59 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:02:00 CDT" duration-ms="823" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- marketOrdersTest -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:02:00 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:02:01 CDT" duration-ms="897" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- marketOrdersTest -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:02:01 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:02:02 CDT" duration-ms="1120" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- marketOrdersTest -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:02:02 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:02:03 CDT" duration-ms="839" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- marketOrdersTest -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:02:03 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:02:04 CDT" duration-ms="808" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- marketOrdersTest -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:02:04 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:02:05 CDT" duration-ms="815" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- marketOrdersTest -->
+        <test-method signature="marketOrdersTest()[pri:4, instance:SwedBank.restApiTest@23f7d05d]" started-at="2020-07-13T14:02:05 CDT" name="marketOrdersTest" finished-at="2020-07-13T14:02:06 CDT" duration-ms="929" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- marketOrdersTest -->
       </class> <!-- SwedBank.restApiTest -->
-    </test> <!-- Default test -->
-  </suite> <!-- Default suite -->
+    </test> <!-- Test -->
+  </suite> <!-- Suite -->
 </testng-results>

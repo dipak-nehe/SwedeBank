@@ -54,7 +54,7 @@ public class restApiTest
 	
 	
 	
-	@Test(enabled=true,priority=0)	
+	@Test(enabled=true,priority=0,groups="FXRates")	
 	public static void getIndecativeRateCcyPairList() throws IOException
 	{
 		//Get the restbase base URL
@@ -80,7 +80,7 @@ public class restApiTest
 				               
 	}
 	
-	@Test(enabled=true,priority=1)
+	@Test(enabled=true,priority=1,groups="FXRates",dependsOnMethods="getIndecativeRateCcyPairList")
 	public static void validateIndicativeCcyPairResponse()
 	{
 		//using string as is
@@ -145,7 +145,7 @@ public class restApiTest
     }
 	
 	//get the rate for each ccy pair and display on scree
-	@Test(enabled=true,priority=2,dataProvider = "data-provider")
+	@Test(enabled=true,priority=2,dataProvider = "data-provider",groups="FXRates")
 	public static void getIndividualExchangeRateForGivenCCY(String ccyPair) throws IOException, ParseException
 	{
 		//Get the restbase base URL
@@ -199,7 +199,7 @@ public class restApiTest
 		       				
 	}
 	
-	@Test(enabled=true,priority=3)
+	@Test(enabled=true,priority=3,groups="FXRates")
 	public static void writeToExcelRate() throws FileNotFoundException, ParseException
 	{
 		XSSFWorkbook workbook = new XSSFWorkbook();
@@ -286,7 +286,7 @@ public class restApiTest
 	}
 	
 	//market order API
-	@Test(enabled=true,priority=4)
+	@Test(enabled=true,priority=4,groups="MarketOrder",invocationCount=10)
 	public void marketOrdersTest()
 	{
 		//Get the restbase base URL
