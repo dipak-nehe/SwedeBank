@@ -1,14 +1,14 @@
 package SwedBank;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Set;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -17,14 +17,16 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.testng.Assert;
+import org.testng.SkipException;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import CommonUtility.BusinessFunctions;
-import CommonUtility.BusinessFunctions.ccyPair;
 import CommonUtility.ReadPropertyFile;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -32,17 +34,19 @@ import io.restassured.response.Response;
 public class restApiTest 
 {
 	private static String indcativeRateCcyPairResponse ="";
-	private static String indcativeSingleRateCcyPairResponse ="";
 	private static String baseUri;
 	private static String appId;
 	private static String indicativeRateEndPoint;
 	private static String indicativeRateSingleCcyRateEndPoint;
 	private static String headerName;
-	private static List<String> exchangeRateList = new LinkedList<String>();
+	private static long requestDelayMs;
+	//only rates that passed validation, ready to be written to excel
+	private static List<JSONObject> exchangeRateList = new LinkedList<JSONObject>();
 	private static String mktOrder;
 	
-	//initilze the global variables through use of contructor
-	public restApiTest() throws IOException
+	//initilze the global variables before any test runs (a missing app key shows as a setup failure)
+	@BeforeClass(alwaysRun=true)
+	public void setUp() throws IOException
 	{
 		restApiTest.baseUri =	BusinessFunctions.getBaseURIForEndPoint();
 		restApiTest.appId = BusinessFunctions.getAppId();
@@ -50,6 +54,8 @@ public class restApiTest
 		restApiTest.headerName = ReadPropertyFile.readPropFileAndReturnPropertyValue(BusinessFunctions.HEADERNAMEFORCCYPAIR);	
 		restApiTest.indicativeRateSingleCcyRateEndPoint = ReadPropertyFile.readPropFileAndReturnPropertyValue(BusinessFunctions.INDICATIVERATECCYPAIRVALUEENDPOINT);
 		restApiTest.mktOrder = ReadPropertyFile.readPropFileAndReturnPropertyValue(BusinessFunctions.MKTORDERAPI);
+		String delay = ReadPropertyFile.readPropFileAndReturnPropertyValue(BusinessFunctions.REQUESTDELAYMS);
+		restApiTest.requestDelayMs = delay == null ? 0 : Long.parseLong(delay.trim());
 	}
 	
 	
@@ -63,70 +69,46 @@ public class restApiTest
 		//format end point with app id
 		String indicativeRateEndPointFinal = String.format(restApiTest.indicativeRateEndPoint, restApiTest.appId);
 		
-		//Get header name and generate unique value for that
-		String uniqueRequestId = ""+ BusinessFunctions.getMilliSeconds();
-		
 		//make the rest call
 		Response response = RestAssured.given()
-							.header(restApiTest.headerName, uniqueRequestId)
+							.header(restApiTest.headerName, BusinessFunctions.getRequestId())
 			                .log()
 			                .all()
 			                .when()
-			                .get(indicativeRateEndPointFinal);//.then().assertThat().statusCode(200);
+			                .get(indicativeRateEndPointFinal);
 		
-		Assert.assertEquals(response.getStatusCode(),200);
+		Assert.assertEquals(response.getStatusCode(),200, "Unexpected status, body: "+response.asString());
 		System.out.println(response.asString());	
 		indcativeRateCcyPairResponse = response.asString();
 				               
 	}
 	
 	@Test(enabled=true,priority=1,groups="FXRates",dependsOnMethods="getIndecativeRateCcyPairList")
-	public static void validateIndicativeCcyPairResponse()
+	public static void validateIndicativeCcyPairResponse() throws ParseException
 	{
-		//using string as is
+		//parse the JSON array instead of string matching, so "EURSEKX" can't match "EURSEK"
+		JSONArray pairs = (JSONArray) new JSONParser().parse(indcativeRateCcyPairResponse);
+		Set<String> actualPairs = new LinkedHashSet<String>();
+		for(Object pair : pairs)
+		{
+			actualPairs.add(String.valueOf(pair));
+		}
+		
+		Set<String> missingPairs = new LinkedHashSet<String>();
 		for(BusinessFunctions.ccyPair pair : BusinessFunctions.ccyPair.values())
 		{
-			if(indcativeRateCcyPairResponse.contains(pair.toString()))
+			if(!actualPairs.remove(pair.name()))
 			{
-				System.out.println("The CCY Pair "+pair.toString()+" exists!!");
+				missingPairs.add(pair.name());
 			}
-			else
-			{
-				System.out.println("The CCY Pair "+pair.toString()+" does not exists!!");
-
-			}
-			
 		}
 		
-		
-		//using list
-		//indecativeRateCcyPairResponse=indecativeRateCcyPairResponse.replace("[", "");
-		//indecativeRateCcyPairResponse=indecativeRateCcyPairResponse.replace("]", "");
-		indcativeRateCcyPairResponse=indcativeRateCcyPairResponse.replaceAll("\",\"", ",");
-		indcativeRateCcyPairResponse=indcativeRateCcyPairResponse.replaceAll("\"", "");
-
-		//System.out.println("Web service response list:"+indecativeRateCcyPairResponse);
-
-		
-		List<String> myList = new ArrayList<String>(Arrays.asList(indcativeRateCcyPairResponse.split(",")));
-		//ListIterator<String> it = myList.listIterator();
-		List<ccyPair> enumValues = Arrays.asList(BusinessFunctions.ccyPair.values());
-		System.out.println("Web service response list:"+indcativeRateCcyPairResponse);
-		System.out.println("Enum list:"+enumValues);
-
-
-		
-		if(myList.equals(enumValues))
+		//pairs left over are new on the API side; report them but don't fail
+		if(!actualPairs.isEmpty())
 		{
-			System.out.println("Expected and Actual Response matches");
+			System.out.println("CCY Pairs returned by the API but not in the enum: "+actualPairs);
 		}
-		else
-		{
-			System.out.println("not match");
-		}
-		
-		
-				
+		Assert.assertTrue(missingPairs.isEmpty(), "Expected CCY Pairs missing from the API response: "+missingPairs);
 	}
 	
 	//data provider
@@ -138,7 +120,6 @@ public class restApiTest
 	    for (BusinessFunctions.ccyPair s : BusinessFunctions.ccyPair.values()) {
 	    	itemList.add(s.name());
 	    }
-	   //Object[] arrayString =  itemList.toArray();
 	    Iterator<String> it =  itemList.listIterator();
 	   
         return it;
@@ -146,64 +127,59 @@ public class restApiTest
 	
 	//get the rate for each ccy pair and display on scree
 	@Test(enabled=true,priority=2,dataProvider = "data-provider",groups="FXRates")
-	public static void getIndividualExchangeRateForGivenCCY(String ccyPair) throws IOException, ParseException
+	public static void getIndividualExchangeRateForGivenCCY(String ccyPair) throws IOException, ParseException, InterruptedException
 	{
 		//Get the restbase base URL
 				RestAssured.baseURI= restApiTest.baseUri;
 				//format end point with app id
 				String indicativeSingleCCYRateEndPointFinal = String.format(restApiTest.indicativeRateSingleCcyRateEndPoint, ccyPair,restApiTest.appId);
 				
-				//Get header name and generate unique value for that
-				String uniqueRequestId = ""+ BusinessFunctions.getMilliSeconds();
-				
 				//make the rest call
 				Response response = RestAssured.given()
-									.header(restApiTest.headerName, uniqueRequestId)
+									.header(restApiTest.headerName, BusinessFunctions.getRequestId())
 					                .log()
 					                .all()
 					                .when()
-					                .get(indicativeSingleCCYRateEndPointFinal);//.then().assertThat().statusCode(200);
+					                .get(indicativeSingleCCYRateEndPointFinal);
 				
-				//Assert.assertEquals(response.getStatusCode(),200);
-				//System.out.println(response.asString());	
-				indcativeSingleRateCcyPairResponse = response.asString();
-				System.out.println(indcativeSingleRateCcyPairResponse);	
-				//add the results for later parsing and adding to excel
-				exchangeRateList.add(indcativeSingleRateCcyPairResponse);
+				//throttle before asserting, so a failure doesn't make the next call hit the rate limit
+				Thread.sleep(restApiTest.requestDelayMs);
+				
+				String body = response.asString();
+				System.out.println(body);	
+				Assert.assertEquals(response.getStatusCode(),200, "Unexpected status for "+ccyPair+", body: "+body);
+				
 				//JSON parser object to parse read file
-		         JSONParser jsonParser = new JSONParser();	
-		        JSONObject jObject = (JSONObject) jsonParser.parse(indcativeSingleRateCcyPairResponse);
+		        JSONObject jObject = (JSONObject) new JSONParser().parse(body);
 		       
-		        //verify if its string
-		        if(BusinessFunctions.verifyIfString(jObject.get("currencyPair").toString()))
-		        {
-		        	System.out.println("Valid Format of CCY pair");
-		        }
+		        Assert.assertEquals(jObject.get("currencyPair"), ccyPair, "Wrong or missing currencyPair");
 		        
-		        Double pt = (Double) jObject.get("midRate");
-		        if(BusinessFunctions.verifyIfDouble(pt))
-		        {
-		        	System.out.println("Valid Format of Exchange rate");
-		        }
+		        //json-simple returns Long for whole numbers and Double otherwise, so check for Number
+		        Object midRate = jObject.get("midRate");
+		        Assert.assertTrue(midRate instanceof Number, "midRate is not a number: "+midRate);
+		        Assert.assertTrue(((Number) midRate).doubleValue() > 0, "midRate is not positive: "+midRate);
 		        
+		        Assert.assertNotNull(jObject.get("rateTimestamp"), "Missing rateTimestamp");
 		        
 		        System.out.println("CurrecnyPair:"+jObject.get("currencyPair"));
-		        System.out.println("MidRate:"+jObject.get("midRate"));
+		        System.out.println("MidRate:"+midRate);
 		        System.out.println("TimeStamp:"+jObject.get("rateTimestamp"));
-		        try {
-					Thread.sleep(15000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		       				
+		        
+		        //add the validated result for writing to excel
+		        exchangeRateList.add(jObject);
 	}
 	
-	@Test(enabled=true,priority=3,groups="FXRates")
-	public static void writeToExcelRate() throws FileNotFoundException, ParseException
+	//alwaysRun so the rates that did succeed are still written when some pairs fail
+	@Test(enabled=true,priority=3,groups="FXRates",dependsOnMethods="getIndividualExchangeRateForGivenCCY",alwaysRun=true)
+	public static void writeToExcelRate() throws IOException
 	{
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		 
+		if(exchangeRateList.isEmpty())
+		{
+			throw new SkipException("No valid exchange rates to write");
+		}
+		
+		try(XSSFWorkbook workbook = new XSSFWorkbook())
+		{
 		XSSFSheet sheet = workbook.createSheet("ExchangeRate");
 		sheet.setColumnWidth(0, 6000);
 		sheet.setColumnWidth(1, 6000);
@@ -216,7 +192,7 @@ public class restApiTest
 		headerStyle.setFillForegroundColor(IndexedColors.GOLD.getIndex());
 		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		 
-		XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+		XSSFFont font = workbook.createFont();
 		font.setFontName("Arial");
 		font.setFontHeightInPoints((short) 16);
 		font.setBold(true);
@@ -239,24 +215,18 @@ public class restApiTest
 		XSSFCellStyle style = workbook.createCellStyle();
 		style.setWrapText(true);
 		
-		ListIterator<String> itr = exchangeRateList.listIterator();
 		int i =1;
 		
-		while(itr.hasNext())
+		for(JSONObject jObject : exchangeRateList)
 		{
-		
-		JSONParser jsonParser = new JSONParser();	
-		JSONObject jObject = (JSONObject) jsonParser.parse(itr.next());
-		        System.out.println("CurrecnyPair:"+jObject.get("currencyPair"));
-		        System.out.println("MidRate:"+jObject.get("midRate"));
-		        System.out.println("TimeStamp:"+jObject.get("rateTimestamp"));
 		XSSFRow row = sheet.createRow(i);
 		XSSFCell cell = row.createCell(0);
 		cell.setCellValue(jObject.get("currencyPair").toString());
 		cell.setCellStyle(style);
 		 
+		//write the rate as a number so excel can sort and calculate with it
 		cell = row.createCell(1);
-		cell.setCellValue(jObject.get("midRate").toString());
+		cell.setCellValue(((Number) jObject.get("midRate")).doubleValue());
 		cell.setCellStyle(style);
 		
 		cell = row.createCell(2);
@@ -265,46 +235,39 @@ public class restApiTest
 		i++;
 		}
 		
-		//File currDir = new File(".");
-		//String path = currDir.getAbsolutePath();
-		String fileName = BusinessFunctions.returnUniqueFileName();
-		String fileLocation = "./Output/"+fileName;
+		Files.createDirectories(Paths.get("./Output"));
+		String fileLocation = "./Output/"+BusinessFunctions.returnUniqueFileName();
 		 
-		FileOutputStream outputStream = new FileOutputStream(fileLocation);
-		try {
+		try(FileOutputStream outputStream = new FileOutputStream(fileLocation))
+		{
 			workbook.write(outputStream);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		try {
-			workbook.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		System.out.println("Wrote "+exchangeRateList.size()+" rates to "+fileLocation);
 		}
 	}
 	
 	//market order API
 	@Test(enabled=true,priority=4,groups="MarketOrder",invocationCount=10)
-	public void marketOrdersTest()
+	public void marketOrdersTest() throws ParseException
 	{
 		//Get the restbase base URL
 		RestAssured.baseURI= restApiTest.baseUri;
 	
-		//Get header name and generate unique value for that
-		String uniqueRequestId = ""+ BusinessFunctions.getMilliSeconds();
 		String mktIdApiUrl = String.format(restApiTest.mktOrder, BusinessFunctions.getDateInISO8601(),restApiTest.appId);
 		
 		//make the rest call
 		Response response = RestAssured.given()
-							.header(restApiTest.headerName, uniqueRequestId)
+							.header(restApiTest.headerName, BusinessFunctions.getRequestId())
 			                .log()
 			                .all()
 			                .when()
-			                .get(mktIdApiUrl);//.then().assertThat().statusCode(200);
+			                .get(mktIdApiUrl);
 		
-		System.out.println(response.asString());
+		String body = response.asString();
+		System.out.println(body);
+		Assert.assertEquals(response.getStatusCode(),200, "Unexpected status, body: "+body);
+		//fails if the body isn't valid JSON
+		new JSONParser().parse(body);
 		
 	}
 	
