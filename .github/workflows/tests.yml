@@ -1,0 +1,59 @@
+name: tests
+
+# Runs the Swedbank FX sandbox API tests. They call the real sandbox, so they need the app key as a
+# repository secret: Settings → Secrets and variables → Actions → SWEDBANK_APP_KEY.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      request_delay_ms:
+        description: Pause between currency-pair rate calls, in milliseconds (129 pairs; 15000 ≈ 32 minutes)
+        default: "15000"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: OpenBankAPI
+    env:
+      SWEDBANK_APP_KEY: ${{ secrets.SWEDBANK_APP_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+          cache-dependency-path: OpenBankAPI/pom.xml
+
+      - name: Check the app key secret is set
+        run: |
+          if [ -z "$SWEDBANK_APP_KEY" ]; then
+            echo "::error::Add the SWEDBANK_APP_KEY repository secret (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+
+      - name: Run tests
+        # Manual runs can change the pause between rate calls; other runs use requestDelayMs from config.properties.
+        env:
+          REQUEST_DELAY_MS: ${{ inputs.request_delay_ms }}
+        run: |
+          if [ -n "$REQUEST_DELAY_MS" ]; then
+            mvn -B test "-DrequestDelayMs=$REQUEST_DELAY_MS"
+          else
+            mvn -B test
+          fi
+
+      - name: Upload test reports and exchange-rate Excel file
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: |
+            OpenBankAPI/target/surefire-reports/
+            OpenBankAPI/Output/
+          if-no-files-found: ignore
