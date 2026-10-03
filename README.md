@@ -23,11 +23,16 @@ Base URL: `https://psd2.api.swedbank.com/partner/sandbox/v1/fx`
 
 | # | Test (report name) | Endpoint | What it checks |
 |---|---|---|---|
-| 1 | Currency pair list returns 200 | `GET /indicative-rate/currencypairs` | Status 200 |
-| 2 | Currency pair list contains every expected pair | (response of test 1) | Response is a JSON array that contains all 129 expected pairs; any extra pairs from the API are logged, not failed |
-| 3 | Indicative rate: `<PAIR>` (×129) | `GET /indicative-rate/rate?currencyPair=<PAIR>` | Status 200; `currencyPair` equals the requested pair; `midRate` is a positive number; `rateTimestamp` is present |
-| 4 | Rates written to Excel | none | Writes every rate that passed test 3 to `Output/ExcelResulCcyPairRate_<time>.xlsx` |
-| 5 | Market orders return 200 (call 1–10 of 10) | `GET /market-order/orders?date=<today>` | Status 200 and a valid JSON body, called 10 times |
+| 1 | Currency pair list returns 200 with JSON | `GET /indicative-rate/currencypairs` | The common checks below |
+| 2 | Currency pair list is well formed and contains every expected pair | (response of test 1) | A non-empty JSON array; every entry is six capital letters with two different currencies; no duplicates; all 129 expected pairs present (extra pairs from the API are logged, not failed) |
+| 3 | Indicative rate: `<PAIR>` (×129) | `GET /indicative-rate/rate?currencyPair=<PAIR>` | The common checks; `currencyPair` equals the requested pair; `bidRate` and `askRate` are positive numbers; bid is not above ask; spread under 5% of the mid rate; `rateTimestamp` is readable, at most 3 days old and not in the future |
+| 4 | Inverse pairs agree | (rates from test 3) | For each pair whose inverse also passed (e.g. SEKNOK and NOKSEK), the two mid rates multiply to 1 within 1% |
+| 5 | Rates written to Excel | none | Writes every rate that passed test 3 to `Output/ExcelResulCcyPairRate_<time>.xlsx`, then reads the file back and checks the header, row count, pairs, mid rates and timestamps |
+| 6 | Market orders return a JSON list (call 1–10 of 10) | `GET /market-order/orders?date=<today>` | The common checks; the body is a JSON list (empty when there are no orders) |
+
+**Common checks on every response** (`CommonUtility.ResponseChecks`): status 200, a JSON `Content-Type`, the `X-Request-ID` we sent echoed back, and a response time under 10 seconds. A 429 failure also says when the hourly limit resets.
+
+Checks on fields within one response use TestNG's `SoftAssert`, so a single run reports every problem with that response, not just the first.
 
 Every request sends a unique `x-request-id` header (a UUID) and the app key as the `app-id` query parameter.
 
@@ -38,8 +43,8 @@ The framework has three layers: TestNG runs the suite, the test class holds the 
 ```mermaid
 flowchart TD
     RUN["Runner<br/>mvn test → Surefire → testng.xml → TestNG"]
-    TEST["Test layer<br/>SwedBank.restApiTest<br/>setUp · 5 tests · @DataProvider (129 pairs)"]
-    UTIL["Utility layer<br/>CommonUtility<br/>BusinessFunctions · ReadPropertyFile"]
+    TEST["Test layer<br/>SwedBank.restApiTest<br/>setUp · 6 tests · @DataProvider (129 pairs)"]
+    UTIL["Utility layer<br/>CommonUtility<br/>BusinessFunctions · ResponseChecks ·<br/>ReadPropertyFile"]
     HTTP["HTTP client<br/>REST Assured<br/>+ AllureRestAssured filter"]
     API[["Swedbank FX sandbox API"]]
     CFG[("config.properties<br/>+ -D overrides")]
@@ -61,10 +66,11 @@ flowchart TD
 
 **Runner (Maven, Surefire, TestNG).** `mvn test` runs `testng.xml` through the Surefire plugin. TestNG decides the order using `priority` and `dependsOnMethods`, feeds the 129 currency pairs to the rate test through a `@DataProvider`, and repeats the market-order test with `invocationCount=10`.
 
-**Test layer (`SwedBank.restApiTest`).** One class holds the five tests. `@BeforeClass setUp` loads everything the tests need once: the base URL, endpoint templates, header name, request delay and app key. It also registers the `AllureRestAssured` filter, so every request and response is attached to its test in the report. Shared state between tests, such as the pair-list response and the validated rates, is kept in static fields, so the suite runs in a single thread.
+**Test layer (`SwedBank.restApiTest`).** One class holds the six tests. `@BeforeClass setUp` loads everything the tests need once: the base URL, endpoint templates, header name, request delay and app key. It also registers the `AllureRestAssured` filter, so every request and response is attached to its test in the report. Shared state between tests, such as the pair-list response and the validated rates, is kept in static fields, so the suite runs in a single thread.
 
 **Utility layer (`CommonUtility`).**
 - `BusinessFunctions` holds the configuration key names, the `ccyPair` enum (the expected currency pairs), the app-key lookup from the environment, and helpers for request IDs and dates.
+- `ResponseChecks` holds the checks every response must pass (status, content type, request ID, response time) and the failure message that explains a 429.
 - `ReadPropertyFile` reads `config.properties` once and caches it. A value passed on the Maven command line as `-Dname=value` overrides the file, which is how CI and local runs change settings without editing it.
 
 ### Test flow
@@ -74,12 +80,13 @@ flowchart LR
     A["setUp"] --> B["1 · Currency pair list"]
     B -->|dependsOn| C["2 · Validate pair list"]
     A --> D["3 · Rate for each of 129 pairs<br/>(pause between calls)"]
-    D -->|"dependsOn, alwaysRun"| E["4 · Write rates to Excel"]
-    A --> F["5 · Market orders ×10"]
+    D -->|"dependsOn, alwaysRun"| G["4 · Inverse pairs agree"]
+    D -->|"dependsOn, alwaysRun"| E["5 · Write rates to Excel<br/>and read them back"]
+    A --> F["6 · Market orders ×10"]
 ```
 
 - **Test 2 depends on test 1.** If the list call fails, validation is skipped instead of failing on an empty response.
-- **Test 4 depends on test 3 with `alwaysRun=true`.** If some pairs fail, the rates that passed are still written; if none passed, the Excel test is skipped.
+- **Tests 4 and 5 depend on test 3 with `alwaysRun=true`.** If some pairs fail, the rates that passed are still compared and written; if none passed (or no pair and its inverse both passed), the test is skipped.
 - **A short pause follows every rate call** (`requestDelayMs`, 250 ms by default), even when the call fails.
 
 ### Design decisions
@@ -87,7 +94,10 @@ flowchart LR
 | Decision | Why |
 |---|---|
 | JSON is parsed with json-simple, not matched as text | Avoids false matches such as `EURSEKX` counting as `EURSEK` |
-| `midRate` is checked as any `Number` | json-simple reads `1` as `Long` and `1.25` as `Double`; a cast to `Double` would crash on whole numbers |
+| Rates are checked as any `Number` | json-simple reads `1` as `Long` and `1.25` as `Double`; a cast to `Double` would crash on whole numbers |
+| Mid rate is calculated as (bid + ask) / 2 | The API used to return `midRate`; it now returns only `bidRate` and `askRate` |
+| Field checks use `SoftAssert` | One run shows every problem with a response, not just the first |
+| Each assertion was proven to fail | A mock of the sandbox with one fault per check (swapped bid/ask, old timestamp, wrong request ID, 429, bad inverse rate, malformed pair list, non-list market orders) fails exactly those 7 tests; the same mock without faults passes all 143 |
 | App key only from the `SWEDBANK_APP_KEY` environment variable | Keeps the key out of the repository; setup fails with a clear message if it is missing |
 | `x-request-id` is a random UUID | A millisecond timestamp can repeat when two requests are sent in the same millisecond |
 | Config values can be overridden with `-D` | Lets CI and local runs change the delay or base URL without editing files |
@@ -108,6 +118,7 @@ flowchart LR
         │   ├── SwedBank/restApiTest.java              The tests
         │   └── CommonUtility/
         │       ├── BusinessFunctions.java             Config keys, currency-pair enum, helpers
+        │       ├── ResponseChecks.java                Checks every response must pass
         │       └── ReadPropertyFile.java              Reads config.properties, with -D overrides
         └── resources/allure.properties                Allure results go to target/allure-results
 ```
@@ -183,7 +194,7 @@ A full run makes 140 requests (1 pair list, 129 rates, 10 market orders), so one
 |---|---|---|
 | Allure | `target/allure-report/index.html` | Every test by name, pass/fail, error messages, and the HTTP request and response for each API call |
 | Surefire | `target/surefire-reports/` | Standard Maven test results (XML and text) |
-| Excel | `Output/ExcelResulCcyPairRate_<time>.xlsx` | Currency pair, mid rate (as a number) and rate timestamp for every rate that passed |
+| Excel | `Output/ExcelResulCcyPairRate_<time>.xlsx` | Currency pair, bid, ask and mid rates (as numbers) and the rate timestamp for every rate that passed |
 
 ## Continuous integration
 

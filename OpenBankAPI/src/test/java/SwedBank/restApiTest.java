@@ -1,13 +1,23 @@
 package SwedBank;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -27,8 +37,10 @@ import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import CommonUtility.BusinessFunctions;
 import CommonUtility.ReadPropertyFile;
+import CommonUtility.ResponseChecks;
 import io.qameta.allure.Allure;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
@@ -47,6 +59,15 @@ public class restApiTest
 	private static List<JSONObject> exchangeRateList = new LinkedList<JSONObject>();
 	private static String mktOrder;
 	private static final AtomicInteger marketOrderCall = new AtomicInteger();
+	//"2026-10-03T16:23 CEST": the sandbox's rateTimestamp format
+	private static final DateTimeFormatter RATE_TIMESTAMP = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm z", Locale.ENGLISH);
+	//real spreads are about 0.2-0.4% of the mid rate; more than 5% means a broken or swapped rate
+	private static final double MAX_SPREAD = 0.05;
+	//rates are live: a timestamp older than this means the sandbox stopped updating
+	private static final Duration MAX_RATE_AGE = Duration.ofDays(3);
+	//a pair and its inverse (SEKNOK, NOKSEK) multiply to about 1; allow for both spreads
+	private static final double INVERSE_TOLERANCE = 0.01;
+	private static final String[] EXCEL_COLUMNS = { "CurrencyPair", "BidRate", "AskRate", "MidRate", "TimeStamp" };
 	
 	//initilze the global variables before any test runs (a missing app key shows as a setup failure)
 	@BeforeClass(alwaysRun=true)
@@ -66,7 +87,7 @@ public class restApiTest
 	
 	
 	
-	@Test(enabled=true,priority=0,groups="FXRates",description="Currency pair list returns 200")	
+	@Test(enabled=true,priority=0,groups="FXRates",description="Currency pair list returns 200 with JSON")	
 	public static void getIndecativeRateCcyPairList() throws IOException
 	{
 		//Get the restbase base URL
@@ -76,28 +97,38 @@ public class restApiTest
 		String indicativeRateEndPointFinal = String.format(restApiTest.indicativeRateEndPoint, restApiTest.appId);
 		
 		//make the rest call
+		String requestId = BusinessFunctions.getRequestId();
 		Response response = RestAssured.given()
-							.header(restApiTest.headerName, BusinessFunctions.getRequestId())
+							.header(restApiTest.headerName, requestId)
 			                .log()
 			                .all()
 			                .when()
 			                .get(indicativeRateEndPointFinal);
 		
-		Assert.assertEquals(response.getStatusCode(),200, statusMessage(response, "currency pair list"));
+		ResponseChecks.assertOk(response, requestId, "currency pair list");
 		System.out.println(response.asString());	
 		indcativeRateCcyPairResponse = response.asString();
 				               
 	}
 	
-	@Test(enabled=true,priority=1,groups="FXRates",dependsOnMethods="getIndecativeRateCcyPairList",description="Currency pair list contains every expected pair")
+	@Test(enabled=true,priority=1,groups="FXRates",dependsOnMethods="getIndecativeRateCcyPairList",description="Currency pair list is well formed and contains every expected pair")
 	public static void validateIndicativeCcyPairResponse() throws ParseException
 	{
 		//parse the JSON array instead of string matching, so "EURSEKX" can't match "EURSEK"
-		JSONArray pairs = (JSONArray) new JSONParser().parse(indcativeRateCcyPairResponse);
+		Object parsed = new JSONParser().parse(indcativeRateCcyPairResponse);
+		Assert.assertTrue(parsed instanceof JSONArray, "Currency pair list is not a JSON array: "+indcativeRateCcyPairResponse);
+		JSONArray pairs = (JSONArray) parsed;
+		Assert.assertFalse(pairs.isEmpty(), "Currency pair list is empty");
+		
+		//check every entry, and report all bad ones together
+		SoftAssert soft = new SoftAssert();
 		Set<String> actualPairs = new LinkedHashSet<String>();
 		for(Object pair : pairs)
 		{
-			actualPairs.add(String.valueOf(pair));
+			String p = String.valueOf(pair);
+			soft.assertTrue(pair instanceof String && p.matches("[A-Z]{6}"), "Not a 6-letter currency pair: "+pair);
+			soft.assertTrue(p.length() != 6 || !p.substring(0, 3).equals(p.substring(3)), "Pair has the same currency twice: "+p);
+			soft.assertTrue(actualPairs.add(p), "Duplicate currency pair: "+p);
 		}
 		
 		Set<String> missingPairs = new LinkedHashSet<String>();
@@ -114,19 +145,14 @@ public class restApiTest
 		{
 			System.out.println("CCY Pairs returned by the API but not in the enum: "+actualPairs);
 		}
-		Assert.assertTrue(missingPairs.isEmpty(), "Expected CCY Pairs missing from the API response: "+missingPairs);
+		soft.assertTrue(missingPairs.isEmpty(), "Expected CCY Pairs missing from the API response: "+missingPairs);
+		soft.assertAll();
 	}
 	
-	//failure message for a non-200 response; on 429 it says when the sandbox's hourly quota resets
-	private static String statusMessage(Response response, String what)
+	//mid rate: halfway between the bid and ask rates (the API stopped returning midRate itself)
+	private static double midRate(JSONObject rate)
 	{
-		String message = "Unexpected status for "+what+", body: "+response.asString();
-		if(response.getStatusCode() == 429)
-		{
-			message += " (sandbox rate limit of "+response.getHeader("X-Rate-Limit-Limit")
-					+" requests reached; resets in "+response.getHeader("X-Rate-Limit-Reset")+" seconds)";
-		}
-		return message;
+		return (((Number) rate.get("bidRate")).doubleValue() + ((Number) rate.get("askRate")).doubleValue()) / 2;
 	}
 	
 	//data provider
@@ -155,8 +181,9 @@ public class restApiTest
 				String indicativeSingleCCYRateEndPointFinal = String.format(restApiTest.indicativeRateSingleCcyRateEndPoint, ccyPair,restApiTest.appId);
 				
 				//make the rest call
+				String requestId = BusinessFunctions.getRequestId();
 				Response response = RestAssured.given()
-									.header(restApiTest.headerName, BusinessFunctions.getRequestId())
+									.header(restApiTest.headerName, requestId)
 					                .log()
 					                .all()
 					                .when()
@@ -167,30 +194,89 @@ public class restApiTest
 				
 				String body = response.asString();
 				System.out.println(body);	
-				Assert.assertEquals(response.getStatusCode(),200, statusMessage(response, ccyPair));
+				ResponseChecks.assertOk(response, requestId, ccyPair);
 				
 				//JSON parser object to parse read file
-		        JSONObject jObject = (JSONObject) new JSONParser().parse(body);
-		       
-		        Assert.assertEquals(jObject.get("currencyPair"), ccyPair, "Wrong or missing currencyPair");
+		        Object parsed = new JSONParser().parse(body);
+		        Assert.assertTrue(parsed instanceof JSONObject, ccyPair+": rate is not a JSON object: "+body);
+		        JSONObject jObject = (JSONObject) parsed;
+		        
+		        //check every field, and report all problems with this rate together
+		        SoftAssert soft = new SoftAssert();
+		        soft.assertEquals(jObject.get("currencyPair"), ccyPair, "Wrong or missing currencyPair");
 		        
 		        //json-simple returns Long for whole numbers and Double otherwise, so check for Number
-		        Object midRate = jObject.get("midRate");
-		        Assert.assertTrue(midRate instanceof Number, "midRate is not a number: "+midRate);
-		        Assert.assertTrue(((Number) midRate).doubleValue() > 0, "midRate is not positive: "+midRate);
+		        Object bid = jObject.get("bidRate");
+		        Object ask = jObject.get("askRate");
+		        boolean numbers = bid instanceof Number && ask instanceof Number;
+		        soft.assertTrue(numbers, "bidRate and askRate must be numbers: bid="+bid+", ask="+ask);
+		        if(numbers)
+		        {
+		        	double b = ((Number) bid).doubleValue();
+		        	double a = ((Number) ask).doubleValue();
+		        	soft.assertTrue(b > 0 && a > 0, "Rates must be positive: bid="+b+", ask="+a);
+		        	soft.assertTrue(b <= a, "bidRate is above askRate: bid="+b+", ask="+a);
+		        	double spread = (a - b) / ((a + b) / 2);
+		        	soft.assertTrue(spread < MAX_SPREAD, String.format("Spread of %.2f%% is too wide: bid=%s, ask=%s", spread * 100, b, a));
+		        }
 		        
-		        Assert.assertNotNull(jObject.get("rateTimestamp"), "Missing rateTimestamp");
+		        //the timestamp must be readable, recent and not in the future
+		        Object timestamp = jObject.get("rateTimestamp");
+		        try
+		        {
+		        	Instant at = ZonedDateTime.parse(String.valueOf(timestamp), RATE_TIMESTAMP).toInstant();
+		        	Instant now = Instant.now();
+		        	soft.assertTrue(at.isAfter(now.minus(MAX_RATE_AGE)), "rateTimestamp is more than "+MAX_RATE_AGE.toDays()+" days old: "+timestamp);
+		        	soft.assertTrue(at.isBefore(now.plus(Duration.ofHours(1))), "rateTimestamp is in the future: "+timestamp);
+		        }
+		        catch(DateTimeParseException e)
+		        {
+		        	soft.fail("rateTimestamp is missing or not in the form 2026-10-03T16:23 CEST: "+timestamp);
+		        }
+		        soft.assertAll();
 		        
 		        System.out.println("CurrecnyPair:"+jObject.get("currencyPair"));
-		        System.out.println("MidRate:"+midRate);
-		        System.out.println("TimeStamp:"+jObject.get("rateTimestamp"));
+		        System.out.println("Bid:"+bid+" Ask:"+ask+" Mid:"+midRate(jObject));
+		        System.out.println("TimeStamp:"+timestamp);
 		        
 		        //add the validated result for writing to excel
 		        exchangeRateList.add(jObject);
 	}
 	
+	//a pair and its inverse must agree: SEKNOK x NOKSEK is about 1
+	@Test(enabled=true,priority=3,groups="FXRates",dependsOnMethods="getIndividualExchangeRateForGivenCCY",alwaysRun=true,description="Inverse pairs agree")
+	public static void inversePairsAgree()
+	{
+		Map<String, Double> mids = new TreeMap<String, Double>();
+		for(JSONObject rate : exchangeRateList)
+		{
+			mids.put(rate.get("currencyPair").toString(), midRate(rate));
+		}
+		
+		SoftAssert soft = new SoftAssert();
+		Set<String> checked = new HashSet<String>();
+		for(Map.Entry<String, Double> e : mids.entrySet())
+		{
+			String pair = e.getKey();
+			String inverse = pair.substring(3) + pair.substring(0, 3);
+			if(mids.containsKey(inverse) && checked.add(inverse))
+			{
+				checked.add(pair);
+				double product = e.getValue() * mids.get(inverse);
+				soft.assertTrue(Math.abs(product - 1) < INVERSE_TOLERANCE,
+						String.format("%s x %s = %.4f, expected about 1", pair, inverse, product));
+			}
+		}
+		if(checked.isEmpty())
+		{
+			throw new SkipException("No pair and its inverse both passed, nothing to compare");
+		}
+		System.out.println("Compared "+checked.size()/2+" pairs with their inverses");
+		soft.assertAll();
+	}
+	
 	//alwaysRun so the rates that did succeed are still written when some pairs fail
-	@Test(enabled=true,priority=3,groups="FXRates",dependsOnMethods="getIndividualExchangeRateForGivenCCY",alwaysRun=true,description="Rates written to Excel")
+	@Test(enabled=true,priority=4,groups="FXRates",dependsOnMethods="getIndividualExchangeRateForGivenCCY",alwaysRun=true,description="Rates written to Excel")
 	public static void writeToExcelRate() throws IOException
 	{
 		if(exchangeRateList.isEmpty())
@@ -201,9 +287,10 @@ public class restApiTest
 		try(XSSFWorkbook workbook = new XSSFWorkbook())
 		{
 		XSSFSheet sheet = workbook.createSheet("ExchangeRate");
-		sheet.setColumnWidth(0, 6000);
-		sheet.setColumnWidth(1, 6000);
-		sheet.setColumnWidth(2, 6000);
+		for(int c = 0; c < EXCEL_COLUMNS.length; c++)
+		{
+			sheet.setColumnWidth(c, 6000);
+		}
 
 		 
 		XSSFRow header = sheet.createRow(0);
@@ -218,17 +305,12 @@ public class restApiTest
 		font.setBold(true);
 		headerStyle.setFont(font);
 		 
-		XSSFCell headerCell = header.createCell(0);
-		headerCell.setCellValue("CurrencyPair");
-		headerCell.setCellStyle(headerStyle);
-		 
-		headerCell = header.createCell(1);
-		headerCell.setCellValue("ExchangeRate");
-		headerCell.setCellStyle(headerStyle);
-		
-		headerCell = header.createCell(2);
-		headerCell.setCellValue("TimeStamp");
-		headerCell.setCellStyle(headerStyle);
+		for(int c = 0; c < EXCEL_COLUMNS.length; c++)
+		{
+			XSSFCell headerCell = header.createCell(c);
+			headerCell.setCellValue(EXCEL_COLUMNS[c]);
+			headerCell.setCellStyle(headerStyle);
+		}
 		
 		//get the list for exchange rate list and write to excel
 		
@@ -244,12 +326,16 @@ public class restApiTest
 		cell.setCellValue(jObject.get("currencyPair").toString());
 		cell.setCellStyle(style);
 		 
-		//write the rate as a number so excel can sort and calculate with it
-		cell = row.createCell(1);
-		cell.setCellValue(((Number) jObject.get("midRate")).doubleValue());
-		cell.setCellStyle(style);
+		//write the rates as numbers so excel can sort and calculate with them
+		double[] rates = { ((Number) jObject.get("bidRate")).doubleValue(), ((Number) jObject.get("askRate")).doubleValue(), midRate(jObject) };
+		for(int c = 0; c < rates.length; c++)
+		{
+			cell = row.createCell(c + 1);
+			cell.setCellValue(rates[c]);
+			cell.setCellStyle(style);
+		}
 		
-		cell = row.createCell(2);
+		cell = row.createCell(4);
 		cell.setCellValue(jObject.get("rateTimestamp").toString());
 		cell.setCellStyle(style);
 		i++;
@@ -263,25 +349,49 @@ public class restApiTest
 			workbook.write(outputStream);
 		}
 		System.out.println("Wrote "+exchangeRateList.size()+" rates to "+fileLocation);
+		
+		//read the file back: every validated rate must be there, in order, with the same values
+		try(FileInputStream in = new FileInputStream(fileLocation); XSSFWorkbook saved = new XSSFWorkbook(in))
+		{
+			XSSFSheet savedSheet = saved.getSheet("ExchangeRate");
+			Assert.assertNotNull(savedSheet, "Sheet ExchangeRate missing from "+fileLocation);
+			Assert.assertEquals(savedSheet.getLastRowNum(), exchangeRateList.size(), "Rows in "+fileLocation+" (not counting the header)");
+			for(int c = 0; c < EXCEL_COLUMNS.length; c++)
+			{
+				Assert.assertEquals(savedSheet.getRow(0).getCell(c).getStringCellValue(), EXCEL_COLUMNS[c], "Header of column "+(c + 1));
+			}
+			SoftAssert soft = new SoftAssert();
+			for(int r = 1; r <= exchangeRateList.size(); r++)
+			{
+				JSONObject expected = exchangeRateList.get(r - 1);
+				XSSFRow row = savedSheet.getRow(r);
+				String pair = expected.get("currencyPair").toString();
+				soft.assertEquals(row.getCell(0).getStringCellValue(), pair, "Pair in row "+r);
+				soft.assertEquals(row.getCell(3).getNumericCellValue(), midRate(expected), 1e-9, "Mid rate of "+pair);
+				soft.assertEquals(row.getCell(4).getStringCellValue(), expected.get("rateTimestamp").toString(), "Timestamp of "+pair);
+			}
+			soft.assertAll();
+		}
 		}
 	}
 	
 	//market order API
-	@Test(enabled=true,priority=4,groups="MarketOrder",invocationCount=10,description="Market orders return 200")
+	@Test(enabled=true,priority=5,groups="MarketOrder",invocationCount=10,description="Market orders return a JSON list")
 	public void marketOrdersTest() throws ParseException
 	{
 		//the 10 calls are separate entries in the report, not one test with 9 retries
 		int call = marketOrderCall.incrementAndGet();
 		Allure.parameter("call", call);
-		Allure.getLifecycle().updateTest(t -> t.setName("Market orders return 200 (call "+call+" of 10)"));
+		Allure.getLifecycle().updateTest(t -> t.setName("Market orders return a JSON list (call "+call+" of 10)"));
 		//Get the restbase base URL
 		RestAssured.baseURI= restApiTest.baseUri;
 	
 		String mktIdApiUrl = String.format(restApiTest.mktOrder, BusinessFunctions.getDateInISO8601(),restApiTest.appId);
 		
 		//make the rest call
+		String requestId = BusinessFunctions.getRequestId();
 		Response response = RestAssured.given()
-							.header(restApiTest.headerName, BusinessFunctions.getRequestId())
+							.header(restApiTest.headerName, requestId)
 			                .log()
 			                .all()
 			                .when()
@@ -289,9 +399,10 @@ public class restApiTest
 		
 		String body = response.asString();
 		System.out.println(body);
-		Assert.assertEquals(response.getStatusCode(),200, statusMessage(response, "market orders"));
-		//fails if the body isn't valid JSON
-		new JSONParser().parse(body);
+		ResponseChecks.assertOk(response, requestId, "market orders");
+		//the sandbox returns a list of orders (empty when there are none); parse() fails on invalid JSON
+		Object orders = new JSONParser().parse(body);
+		Assert.assertTrue(orders instanceof JSONArray, "Market orders is not a JSON list: "+body);
 		
 	}
 	
