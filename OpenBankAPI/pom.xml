@@ -5,6 +5,17 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>OpenBankAPI</name>
   <description>OpenBankAPI</description>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-bom</artifactId>
+        <version>3.0.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
   <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
 <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
@@ -38,6 +49,17 @@
     <groupId>org.testng</groupId>
     <artifactId>testng</artifactId>
     <version>7.12.0</version>
+    <scope>test</scope>
+</dependency>
+<!-- Allure: test results for the report (target/allure-results), with each HTTP request and response attached -->
+<dependency>
+    <groupId>io.qameta.allure</groupId>
+    <artifactId>allure-testng</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>io.qameta.allure</groupId>
+    <artifactId>allure-rest-assured</artifactId>
     <scope>test</scope>
 </dependency>
   

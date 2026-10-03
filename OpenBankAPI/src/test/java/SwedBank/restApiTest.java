@@ -9,6 +9,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -28,6 +29,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import CommonUtility.BusinessFunctions;
 import CommonUtility.ReadPropertyFile;
+import io.qameta.allure.Allure;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
@@ -43,6 +46,7 @@ public class restApiTest
 	//only rates that passed validation, ready to be written to excel
 	private static List<JSONObject> exchangeRateList = new LinkedList<JSONObject>();
 	private static String mktOrder;
+	private static final AtomicInteger marketOrderCall = new AtomicInteger();
 	
 	//initilze the global variables before any test runs (a missing app key shows as a setup failure)
 	@BeforeClass(alwaysRun=true)
@@ -56,11 +60,13 @@ public class restApiTest
 		restApiTest.mktOrder = ReadPropertyFile.readPropFileAndReturnPropertyValue(BusinessFunctions.MKTORDERAPI);
 		String delay = ReadPropertyFile.readPropFileAndReturnPropertyValue(BusinessFunctions.REQUESTDELAYMS);
 		restApiTest.requestDelayMs = delay == null ? 0 : Long.parseLong(delay.trim());
+		//attach every request and response to its test in the Allure report
+		RestAssured.replaceFiltersWith(new AllureRestAssured());
 	}
 	
 	
 	
-	@Test(enabled=true,priority=0,groups="FXRates")	
+	@Test(enabled=true,priority=0,groups="FXRates",description="Currency pair list returns 200")	
 	public static void getIndecativeRateCcyPairList() throws IOException
 	{
 		//Get the restbase base URL
@@ -83,7 +89,7 @@ public class restApiTest
 				               
 	}
 	
-	@Test(enabled=true,priority=1,groups="FXRates",dependsOnMethods="getIndecativeRateCcyPairList")
+	@Test(enabled=true,priority=1,groups="FXRates",dependsOnMethods="getIndecativeRateCcyPairList",description="Currency pair list contains every expected pair")
 	public static void validateIndicativeCcyPairResponse() throws ParseException
 	{
 		//parse the JSON array instead of string matching, so "EURSEKX" can't match "EURSEK"
@@ -126,9 +132,11 @@ public class restApiTest
     }
 	
 	//get the rate for each ccy pair and display on scree
-	@Test(enabled=true,priority=2,dataProvider = "data-provider",groups="FXRates")
+	@Test(enabled=true,priority=2,dataProvider = "data-provider",groups="FXRates",description="Indicative rate")
 	public static void getIndividualExchangeRateForGivenCCY(String ccyPair) throws IOException, ParseException, InterruptedException
 	{
+		//name each report entry after its pair, so a failed pair is visible in the list
+		Allure.getLifecycle().updateTest(t -> t.setName("Indicative rate: "+ccyPair));
 		//Get the restbase base URL
 				RestAssured.baseURI= restApiTest.baseUri;
 				//format end point with app id
@@ -170,7 +178,7 @@ public class restApiTest
 	}
 	
 	//alwaysRun so the rates that did succeed are still written when some pairs fail
-	@Test(enabled=true,priority=3,groups="FXRates",dependsOnMethods="getIndividualExchangeRateForGivenCCY",alwaysRun=true)
+	@Test(enabled=true,priority=3,groups="FXRates",dependsOnMethods="getIndividualExchangeRateForGivenCCY",alwaysRun=true,description="Rates written to Excel")
 	public static void writeToExcelRate() throws IOException
 	{
 		if(exchangeRateList.isEmpty())
@@ -247,9 +255,13 @@ public class restApiTest
 	}
 	
 	//market order API
-	@Test(enabled=true,priority=4,groups="MarketOrder",invocationCount=10)
+	@Test(enabled=true,priority=4,groups="MarketOrder",invocationCount=10,description="Market orders return 200")
 	public void marketOrdersTest() throws ParseException
 	{
+		//the 10 calls are separate entries in the report, not one test with 9 retries
+		int call = marketOrderCall.incrementAndGet();
+		Allure.parameter("call", call);
+		Allure.getLifecycle().updateTest(t -> t.setName("Market orders return 200 (call "+call+" of 10)"));
 		//Get the restbase base URL
 		RestAssured.baseURI= restApiTest.baseUri;
 	

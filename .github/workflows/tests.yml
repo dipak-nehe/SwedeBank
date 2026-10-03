@@ -48,8 +48,45 @@ jobs:
             mvn -B test
           fi
 
+      # The key is part of every request URL (app-id=...), so it ends up in the request logs and the Allure HTTP
+      # attachments. GitHub hides secrets in the run log but not inside artifacts, so blank it out before uploading.
+      - name: Hide the app key in the reports
+        id: hide_key
+        if: always() && env.SWEDBANK_APP_KEY != ''
+        run: |
+          for d in target/surefire-reports target/allure-results; do
+            [ -d "$d" ] && find "$d" -type f -exec perl -pi -e 's/\Q$ENV{SWEDBANK_APP_KEY}\E/***/g' {} +
+          done
+          if grep -rlF -- "$SWEDBANK_APP_KEY" target/surefire-reports target/allure-results Output 2>/dev/null; then
+            echo "::error::The app key is still in the files above; not uploading them."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v7
+        if: always() && steps.hide_key.outcome == 'success'
+        with:
+          node-version: "22"
+
+      # Allure 3 (allurerc.mjs): one self-contained index.html, with each request and response attached to its test
+      - name: Build the Allure report
+        if: always() && steps.hide_key.outcome == 'success' && hashFiles('OpenBankAPI/target/allure-results/*') != ''
+        run: |
+          npx --yes allure@3.20.0 generate target/allure-results
+          node -e '
+            const s = require("./target/allure-report/summary.json").stats;
+            console.log(`### Allure: ${s.passed ?? 0} passed, ${s.failed ?? 0} failed, ${s.broken ?? 0} broken, ${s.skipped ?? 0} skipped of ${s.total}`);
+            console.log("Download the **allure-report** artifact below and open index.html.");
+          ' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the Allure report
+        if: always() && steps.hide_key.outcome == 'success' && hashFiles('OpenBankAPI/target/allure-report/index.html') != ''
+        uses: actions/upload-artifact@v7
+        with:
+          name: allure-report
+          path: OpenBankAPI/target/allure-report/
+
       - name: Upload test reports and exchange-rate Excel file
-        if: always()
+        if: always() && steps.hide_key.outcome == 'success'
         uses: actions/upload-artifact@v7
         with:
           name: test-results
