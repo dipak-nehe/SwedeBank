@@ -8,8 +8,13 @@ on:
   workflow_dispatch:
     inputs:
       request_delay_ms:
-        description: Pause between currency-pair rate calls, in milliseconds (129 pairs; 15000 ≈ 32 minutes)
-        default: "15000"
+        description: Pause between currency-pair rate calls, in milliseconds (129 pairs)
+        default: "250"
+
+# The sandbox allows about 200 requests an hour and a run makes 140, so runs wait their turn instead of overlapping.
+concurrency:
+  group: swedbank-sandbox
+  cancel-in-progress: false
 
 jobs:
   test:

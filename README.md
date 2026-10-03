@@ -11,6 +11,7 @@ Built with Java, TestNG and REST Assured, and run on GitHub Actions on every pus
 - [Project structure](#project-structure)
 - [Running the tests](#running-the-tests)
 - [Configuration](#configuration)
+- [Rate limit](#rate-limit)
 - [Reports](#reports)
 - [Continuous integration](#continuous-integration)
 - [Security](#security)
@@ -79,7 +80,7 @@ flowchart LR
 
 - **Test 2 depends on test 1.** If the list call fails, validation is skipped instead of failing on an empty response.
 - **Test 4 depends on test 3 with `alwaysRun=true`.** If some pairs fail, the rates that passed are still written; if none passed, the Excel test is skipped.
-- **A pause follows every rate call** (`requestDelayMs`), even when the call fails, so one failure doesn't push the next call into the sandbox's rate limit.
+- **A short pause follows every rate call** (`requestDelayMs`, 250 ms by default), even when the call fails.
 
 ### Design decisions
 
@@ -130,10 +131,10 @@ export SWEDBANK_APP_KEY=<your sandbox app key>
 mvn test
 ```
 
-A full run takes about 32 minutes, because of the 15-second pause after each of the 129 rate calls. For a quicker run, shorten the pause if the sandbox allows it:
+A full run makes 140 requests and takes about 2 minutes. To change the pause between rate calls:
 
 ```bash
-mvn test -DrequestDelayMs=2000
+mvn test -DrequestDelayMs=0
 ```
 
 If `SWEDBANK_APP_KEY` isn't set, setup fails with a message saying so and the other tests are skipped.
@@ -156,11 +157,25 @@ Settings live in `OpenBankAPI/config.properties`. Any of them can be overridden 
 | `indicativeRateSingleCcyPair` | `/indicative-rate/rate?currencyPair=%s&app-id=%s` | Single-rate endpoint |
 | `marketOrderApiUrl` | `/market-order/orders?date=%s&app-id=%s` | Market-order endpoint |
 | `headerNameCcyIndPair` | `x-request-id` | Name of the request-ID header |
-| `requestDelayMs` | `15000` | Pause after each rate call, in milliseconds |
+| `requestDelayMs` | `250` | Pause after each rate call, in milliseconds |
 
 The app key is not a setting: it comes only from the `SWEDBANK_APP_KEY` environment variable.
 
 The expected currency pairs are the `ccyPair` enum in `BusinessFunctions.java`. When Swedbank adds or removes a pair, update the enum; test 2 lists any pairs the API returns that the enum doesn't have.
+
+## Rate limit
+
+Swedbank doesn't document the sandbox's rate limit, but every response reports it in headers:
+
+```text
+X-Rate-Limit-Limit: 200
+X-Rate-Limit-Remaining: 193
+X-Rate-Limit-Reset: 2675
+```
+
+That is about **200 requests per hour**; `X-Rate-Limit-Reset` is the number of seconds until the count resets. It is not a per-second limit: 30 requests sent back to back (about 2 a second) all succeeded. The count appears to be kept separately on several servers, so the remaining number can jump around between requests.
+
+A full run makes 140 requests (1 pair list, 129 rates, 10 market orders), so one run fits within the hour. If a test gets a 429, its failure message includes the limit and how many seconds remain until it resets.
 
 ## Reports
 
@@ -176,7 +191,7 @@ The expected currency pairs are the `ccyPair` enum in `BusinessFunctions.java`. 
 
 1. Checks out the code and sets up JDK 17 with a Maven cache.
 2. Fails straight away with a clear message if the `SWEDBANK_APP_KEY` secret is missing.
-3. Runs `mvn test`. Manual runs can set the pause between rate calls (`request_delay_ms`, default 15000).
+3. Runs `mvn test`. Runs never overlap: a new run waits for the one in progress (if several are waiting, only the newest runs), so pushes in quick succession can't use up the hourly limit together. Manual runs can set the pause between rate calls (`request_delay_ms`, default 250).
 4. Replaces the app key with `***` in every report file. If the key is still found, nothing is uploaded.
 5. Builds the Allure report and adds a pass/fail line to the run summary.
 6. Uploads two artifacts: **allure-report** (open `index.html`) and **test-results** (Surefire reports and the Excel file).
@@ -196,6 +211,6 @@ gh secret set SWEDBANK_APP_KEY -R dipak-nehe/SwedeBank
 ## Known limitations
 
 - **Runs against a live sandbox.** Results depend on the sandbox being up and its data; there is no offline mode in the repository.
-- **Slow by default.** The 15-second pause between rate calls keeps the suite under the sandbox's rate limit, but makes a full run take about 32 minutes.
+- **Hourly request limit.** The sandbox allows about 200 requests an hour (see [Rate limit](#rate-limit)), and a full run makes 140, so more than one full run an hour can fail with 429 errors.
 - **Single-threaded.** Tests share state through static fields, so they must not run in parallel.
 - **Fixed pair list.** The expected pairs are hard-coded in the `ccyPair` enum and need updating when Swedbank's list changes.

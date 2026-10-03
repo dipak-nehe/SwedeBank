@@ -83,7 +83,7 @@ public class restApiTest
 			                .when()
 			                .get(indicativeRateEndPointFinal);
 		
-		Assert.assertEquals(response.getStatusCode(),200, "Unexpected status, body: "+response.asString());
+		Assert.assertEquals(response.getStatusCode(),200, statusMessage(response, "currency pair list"));
 		System.out.println(response.asString());	
 		indcativeRateCcyPairResponse = response.asString();
 				               
@@ -115,6 +115,18 @@ public class restApiTest
 			System.out.println("CCY Pairs returned by the API but not in the enum: "+actualPairs);
 		}
 		Assert.assertTrue(missingPairs.isEmpty(), "Expected CCY Pairs missing from the API response: "+missingPairs);
+	}
+	
+	//failure message for a non-200 response; on 429 it says when the sandbox's hourly quota resets
+	private static String statusMessage(Response response, String what)
+	{
+		String message = "Unexpected status for "+what+", body: "+response.asString();
+		if(response.getStatusCode() == 429)
+		{
+			message += " (sandbox rate limit of "+response.getHeader("X-Rate-Limit-Limit")
+					+" requests reached; resets in "+response.getHeader("X-Rate-Limit-Reset")+" seconds)";
+		}
+		return message;
 	}
 	
 	//data provider
@@ -155,7 +167,7 @@ public class restApiTest
 				
 				String body = response.asString();
 				System.out.println(body);	
-				Assert.assertEquals(response.getStatusCode(),200, "Unexpected status for "+ccyPair+", body: "+body);
+				Assert.assertEquals(response.getStatusCode(),200, statusMessage(response, ccyPair));
 				
 				//JSON parser object to parse read file
 		        JSONObject jObject = (JSONObject) new JSONParser().parse(body);
@@ -277,7 +289,7 @@ public class restApiTest
 		
 		String body = response.asString();
 		System.out.println(body);
-		Assert.assertEquals(response.getStatusCode(),200, "Unexpected status, body: "+body);
+		Assert.assertEquals(response.getStatusCode(),200, statusMessage(response, "market orders"));
 		//fails if the body isn't valid JSON
 		new JSONParser().parse(body);
 		
